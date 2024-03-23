@@ -6,6 +6,7 @@ const spacing = 32;
 const circleRadius = 120;
 const rectShortSide = 120;
 const rectLongSide = 400;
+const interval = 400;
 
 function load() {
 	const canvas = document.getElementById('canvas');
@@ -15,15 +16,16 @@ function load() {
 
 	let i = 0;
 	setInterval(() => {
-		if ((i - 100) % 400 == 0) {
-			maskFunc = [circle, horizontalRect, verticalRect][(i - 100) / 400];
+		const allFuncs = [circle, horizontalRect, verticalRect, plus, L];
+		if ((i - 100) % interval == 0) {
+			maskFunc = allFuncs[(i - 100) / interval];
 			fadeIn();
-		} else if (i % 400 == 0) {
+		} else if (i % interval == 0) {
 			fadeOut();
 		}
 
 		i++;
-		i %= 1200;
+		i %= allFuncs.length * interval;
 	}, 20);
 
 	requestAnimationFrame(draw);
@@ -98,5 +100,25 @@ function verticalRect() {
 		(canvas.height - rectLongSide) / 2,
 		rectShortSide,
 		rectLongSide
+	);
+}
+
+function plus() {
+	horizontalRect();
+	verticalRect();
+}
+
+function L() {
+	ctx.fillRect(
+		(canvas.width - rectLongSide) / 2,
+		(canvas.height - rectLongSide) / 2,
+		rectShortSide,
+		rectLongSide
+	);
+	ctx.fillRect(
+		(canvas.width - rectLongSide) / 2,
+		(canvas.height - rectLongSide) / 2,
+		rectLongSide,
+		rectShortSide
 	);
 }
